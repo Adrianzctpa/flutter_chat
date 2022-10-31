@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:flutter_chat/models/auth_form_data.dart';
+import 'package:flutter_chat/core/models/auth_form_data.dart';
 import 'package:flutter_chat/components/user_image_form.dart';
 
 class AuthForm extends StatefulWidget {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat/components/auth_form.dart';
-import 'package:flutter_chat/models/auth_form_data.dart';
+import 'package:flutter_chat/core/models/auth_form_data.dart';
+import 'package:flutter_chat/core/services/auth/auth_mock_service.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key}) : super(key: key);
@@ -12,16 +13,29 @@ class AuthPage extends StatefulWidget {
 class _AuthPageState extends State<AuthPage> {
   bool _isLoading = false;
 
-  void _handleSubmit(AuthFormData formData) {
-    setState(() {
-      _isLoading = true;
-    });
-  
-    debugPrint(formData.email);
+  Future<void> _handleSubmit(AuthFormData formData) async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
 
-    setState(() {
-      _isLoading = false;
-    });
+      if (formData.isLogin) {
+        await AuthMockService().logIn(formData.email, formData.password);
+      } else {
+        await AuthMockService().signUp(
+          formData.email,
+          formData.password,
+          formData.name,
+          formData.img!,
+        );
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    } 
   }
 
   @override

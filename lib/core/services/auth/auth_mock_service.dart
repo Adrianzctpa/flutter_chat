@@ -5,12 +5,22 @@ import 'package:flutter_chat/core/services/auth/auth_service.dart';
 import 'package:flutter_chat/core/models/chat_user.dart';
 
 class AuthMockService implements AuthService {
-  static final Map<String, ChatUser> _users = {};
+  static const avatarPath = 'assets/images/avatar.png';
   static ChatUser? _currentUser;
+  static final _defaultUser = ChatUser(
+    id: '1',
+    name: 'Default User',
+    email: 'default@user.com',
+    imageUrl: avatarPath,
+  );
+  static final Map<String, ChatUser> _users = {
+    _defaultUser.email: _defaultUser
+  };
+
   static MultiStreamController<ChatUser?>? _controller;
   static final _userStream = Stream<ChatUser?>.multi((controller) { 
     _controller = controller;
-    _updateUser(null);
+    _updateUser(_defaultUser);
   });
 
   @override
@@ -29,7 +39,7 @@ class AuthMockService implements AuthService {
       id: Random().nextDouble().toString(),
       name: name,
       email: email,
-      imageUrl: img?.path ?? 'assets/images/...',
+      imageUrl: img?.path ?? avatarPath,
     );
     
     _users.putIfAbsent(email, () => newUser);

@@ -5,24 +5,7 @@ import 'package:flutter_chat/core/models/chat_message.dart';
 import 'package:flutter_chat/core/models/chat_user.dart';
 
 class ChatMockService implements ChatService {
-  static final List<ChatMessage> _msgs = [
-    ChatMessage(
-      id: Random().nextDouble().toString(),
-      messageContent: 'lorem ipsum',
-      messageType: 'text',
-      uid: '1',
-      username: 'Test',
-      userAvatar: 'assets/images/avatar.png',
-    ),
-    ChatMessage(
-      id: Random().nextDouble().toString(),
-      messageContent: 'lorem ipsum 2',
-      messageType: 'text',
-      uid: '2',
-      username: 'Test 2',
-      userAvatar: 'assets/images/avatar.png',
-    ),
-  ];
+  static final List<ChatMessage> _msgs = [];
   static MultiStreamController<List<ChatMessage>>? _controller;
 
   static final _msgStream = Stream<List<ChatMessage>>.multi((controller) {
@@ -47,7 +30,7 @@ class ChatMockService implements ChatService {
     );
 
     _msgs.add(msg);
-    _controller?.add(_msgs);
+    _controller?.add(_msgs.reversed.toList());
     return msg;
   }
 }

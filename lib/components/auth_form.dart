@@ -59,8 +59,9 @@ class _AuthFormState extends State<AuthForm> {
                 decoration: const InputDecoration(labelText: 'Email'),
                 validator: (valEmail) {
                   final email = valEmail ?? '';
+                  RegExp regExp = RegExp(r'^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$');
 
-                  if (email.isEmpty || !email.contains('@')) {
+                  if (email.isEmpty || !email.contains('@') || !regExp.hasMatch(email)) {
                     return 'Please enter a valid email address';
                   }
 

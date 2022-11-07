@@ -60,9 +60,4 @@ class AuthMockService implements AuthService {
     _currentUser = user;
     _controller?.add(user);
   }
-
-  static void _addUser(ChatUser user) {
-    _users[user.id] = user;
-    _controller?.add(user);
-  }
 }

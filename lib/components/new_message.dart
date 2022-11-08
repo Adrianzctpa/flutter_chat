@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chat/core/models/chat_message.dart';
 import 'package:flutter_chat/core/services/auth/auth_service.dart';
 import 'package:flutter_chat/core/services/chat/chat_service.dart';
 
@@ -17,7 +18,17 @@ class _NewMessageState extends State<NewMessage> {
     final user = AuthService().currentUser();
 
     if (user != null) {
-      await ChatService().sendMessage(_msg, user);
+      final json = {
+        'id': '',
+        'messageContent': _msg,
+        'messageType': 'text',
+        'createdAt': DateTime.now(),
+        'uid': user.id,
+        'username': user.name,
+        'userAvatar': user.imageUrl,
+      };
+      final msg = ChatMessage.fromJson(json);
+      await ChatService().sendMessage(msg);
       _msgController.clear();
     }
   }

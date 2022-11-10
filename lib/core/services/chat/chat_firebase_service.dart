@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_chat/core/services/auth/auth_firebase_service.dart';
 import 'package:flutter_chat/core/services/chat/chat_service.dart';
 import 'package:flutter_chat/core/models/chat_message.dart';
 
@@ -7,12 +8,29 @@ class ChatFirebaseService implements ChatService {
   
   @override
   Stream<List<ChatMessage>> messages() {
-    return const Stream<List<ChatMessage>>.empty();
+    final store = FirebaseFirestore.instance;
+
+    final snapshots = store.collection('chat')
+    .withConverter(fromFirestore: _fromFirestore, toFirestore: _toFirestore)
+    .orderBy('createdAt', descending: true)
+    .snapshots();
+
+    return Stream<List<ChatMessage>>.multi((controller) {
+      snapshots.listen((snapshot) {
+        final List<ChatMessage> messages = snapshot.docs.map((doc) => doc.data()).toList();
+        controller.add(messages);
+      });
+    });
   }
 
   @override
   Future<ChatMessage?> sendMessage(ChatMessage msg) async {
     final store = FirebaseFirestore.instance;
+
+    if (msg.username == '') {
+      AuthFireBaseService().signOut();
+      return null;
+    }
 
     final docRef = await store.collection('chat')
     .withConverter(fromFirestore: _fromFirestore, toFirestore: _toFirestore)

@@ -44,7 +44,8 @@ class AuthFireBaseService implements AuthService {
     await creds.user?.updateDisplayName(name);
     await creds.user?.updatePhotoURL(imgUrl ?? avatarPath);
   
-    await _saveUser(_toChatUser(creds.user!, imgUrl));
+    _currentUser = _toChatUser(creds.user!, imgUrl, name);
+    await _saveUser(_currentUser!);
   }
 
   @override
@@ -74,10 +75,10 @@ class AuthFireBaseService implements AuthService {
     store.collection('users').doc(user.id).set(user.toJson());
   }
 
-  static ChatUser _toChatUser(User user, [String? imageUrl]) {
+  static ChatUser _toChatUser(User user, [String? imageUrl, String? name]) {
     return ChatUser(
       id: user.uid,
-      name: user.displayName ?? user.email!.split('@')[0],
+      name: name ?? user.displayName ?? user.email!.split('@')[0],
       email: user.email ?? '',
       imageUrl: imageUrl ??  user.photoURL ?? avatarPath,
     ); 

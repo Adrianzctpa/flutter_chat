@@ -21,13 +21,9 @@ class MessageBubble extends StatelessWidget {
       prov = FileImage(File(imageUrl));
     }
 
-    //if (isMe) {
-      //return const SizedBox.shrink();
-    //} else {
-      return CircleAvatar(
-        backgroundImage: prov,
-      );
-    //}
+    return CircleAvatar(
+      backgroundImage: prov,
+    );
   }
 
   @override
@@ -73,6 +69,19 @@ class MessageBubble extends StatelessWidget {
                       color: isMe ? Colors.black : Colors.white
                     )
                   ),
+                  if (message.messageType == 'image')
+                    Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      width: 150,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                          image: NetworkImage(message.image!),
+                          fit: BoxFit.cover
+                        )
+                      ),
+                    )
                 ],
               )
             ),

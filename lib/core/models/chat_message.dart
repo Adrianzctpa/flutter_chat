@@ -5,6 +5,7 @@ class ChatMessage {
   final String messageContent;
   final String messageType;
   final DateTime createdAt;
+  String? image;
 
   final String uid;
   final String username;
@@ -15,6 +16,7 @@ class ChatMessage {
     required this.messageContent,
     required this.messageType,
     required this.createdAt,
+    this.image,
     required this.uid,
     required this.username,
     required this.userAvatar,
@@ -26,6 +28,7 @@ class ChatMessage {
       messageContent: json['messageContent'],
       messageType: json['messageType'],
       createdAt: parseTime(json['createdAt']),
+      image: json['image'],
       uid: json['uid'],
       username: json['username'],
       userAvatar: json['userAvatar'],
